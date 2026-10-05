@@ -1,0 +1,6 @@
+@Riff_HostAddress = http://localhost:5271
+
+GET {{Riff_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
