@@ -1,6 +1,6 @@
 namespace Raff.Domain.Entities;
 
-record User
+internal record User
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
