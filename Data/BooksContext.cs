@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Riff.Models;
+using Raff.Models;
 using Microsoft.Extensions.Configuration;
 
 
-namespace Riff.Data;
+namespace Raff.Data;
 
 
 public partial class BooksContext : DbContext

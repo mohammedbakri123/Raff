@@ -1,4 +1,4 @@
-namespace Riff.Domain.Entities;
+namespace Raff.Domain.Entities;
 
 record User
 {

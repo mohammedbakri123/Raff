@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Riff.Models;
+namespace Raff.Models;
 
 public partial class Author
 {
