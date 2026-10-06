@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace Riff.Models;
+
+public partial class ReadingEntry
+{
+    public int Id { get; set; }
+
+    public int UserId { get; set; }
+
+    public int BookId { get; set; }
+
+    public decimal? Rating { get; set; }
+
+    public DateTime? StartedAt { get; set; }
+
+    public DateTime? FinishedAt { get; set; }
+
+    public string? Notes { get; set; }
+
+    public DateTime? CreatedAt { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+
+    public virtual Book Book { get; set; } = null!;
+
+    public virtual User User { get; set; } = null!;
+}

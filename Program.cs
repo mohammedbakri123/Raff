@@ -1,4 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Riff.Data;
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddOpenApi();
 
@@ -23,12 +26,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
-
-app.MapGet("/", () => app.Environment.EnvironmentName);
-var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection");
-
-app.MapGet("/conStr", () => connectionString);
 
 
 app.Run();
