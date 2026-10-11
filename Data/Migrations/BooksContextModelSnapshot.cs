@@ -74,6 +74,9 @@ namespace Raff.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("CoverUrl")
                         .HasColumnType("text")
                         .HasColumnName("cover_url");
@@ -94,7 +97,26 @@ namespace Raff.Migrations
                     b.HasKey("Id")
                         .HasName("books_pkey");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("books", (string)null);
+                });
+
+            modelBuilder.Entity("Raff.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Raff.Models.ReadingEntry", b =>
@@ -208,6 +230,15 @@ namespace Raff.Migrations
                         .HasForeignKey("BookId")
                         .IsRequired()
                         .HasConstraintName("book_authors_book_id_fkey");
+                });
+
+            modelBuilder.Entity("Raff.Models.Book", b =>
+                {
+                    b.HasOne("Raff.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Raff.Models.ReadingEntry", b =>

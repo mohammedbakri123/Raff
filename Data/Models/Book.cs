@@ -15,6 +15,7 @@ public partial class Book
 
     public string? CoverUrl { get; set; }
 
+    public Category? Category { get; set; }
     public virtual ICollection<ReadingEntry> ReadingEntries { get; set; } = new List<ReadingEntry>();
 
     public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
