@@ -150,6 +150,29 @@ public partial class BooksContext : DbContext
             entity.Property(e => e.Username).HasColumnName("username");
         });
 
+        // modelBuilder.Entity<test>(entity =>
+        //        {
+        //            entity.HasKey(e => e.Id).HasName("users_pkey1");
+
+        //            entity.ToTable("users");
+
+        //            entity.HasIndex(e => e.Email, "users_email_key1").IsUnique();
+
+        //            entity.HasIndex(e => e.Username, "users_username_key").IsUnique();
+
+        //            entity.Property(e => e.Id)
+        //                .UseIdentityAlwaysColumn()
+        //                .HasColumnName("id");
+        //            entity.Property(e => e.CreatedAt)
+        //                .HasDefaultValueSql("now()")
+        //                .HasColumnType("timestamp without time zone")
+        //                .HasColumnName("created_at");
+        //            entity.Property(e => e.Email).HasColumnName("email");
+        //            entity.Property(e => e.PasswordHash).HasColumnName("password_hash");
+        //            entity.Property(e => e.Username).HasColumnName("username");
+        //        });
+
+
         OnModelCreatingPartial(modelBuilder);
     }
 
