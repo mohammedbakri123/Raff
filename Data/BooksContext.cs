@@ -11,14 +11,14 @@ namespace Raff.Data;
 public partial class BooksContext : DbContext
 {
 
-    private readonly IConfiguration _configuration;
+    // private readonly IConfiguration _configuration;
 
 
 
-    public BooksContext(DbContextOptions<BooksContext> options, IConfiguration configuration)
+    public BooksContext(DbContextOptions<BooksContext> options)
         : base(options)
     {
-        _configuration = configuration;
+        // _configuration = configuration;
 
     }
 
@@ -33,8 +33,8 @@ public partial class BooksContext : DbContext
 
 
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //     => optionsBuilder.UseNpgsql(_configuration.GetConnectionString("DefaultConnection"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
