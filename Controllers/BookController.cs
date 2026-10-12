@@ -25,4 +25,12 @@ public class BookController : ControllerBase
         var book = await _bookService.GetBookByIdAsync(id);
         return Ok(book);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Add([FromBody] createBookDto dto)
+    {
+        var book = await _bookService.CreateBookAsync(dto);
+
+        return Ok(book);
+    }
 }

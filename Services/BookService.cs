@@ -8,9 +8,31 @@ public class BookService(BooksContext context) : IBookService
 {
 
 
-    public Task<BookDto> CreateBookAsync(createBookDto bookDto)
+    public async Task<BookDto> CreateBookAsync(createBookDto bookDto)
     {
-        throw new NotImplementedException();
+        bool isExist = await context.Books.AnyAsync(b => b.Title == bookDto.title);
+
+        if (isExist)
+        {
+            throw new ArgumentException("Book with this title already exists");
+
+        }
+
+        Book obj = new Book
+        {
+            Title = bookDto.title,
+            PublishedYear = bookDto.publishedYear,
+            Summary = bookDto.summary,
+            CoverUrl = bookDto.CoverUrl,
+            Authors = []
+
+        };
+        context.Books.Add(obj);
+        await context.SaveChangesAsync();
+
+        return Map(obj);
+
+
     }
 
     public async Task<BookDto> GetBookByIdAsync(int id)

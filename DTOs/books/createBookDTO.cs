@@ -12,5 +12,9 @@ public record createBookDto
     public int publishedYear { set; get; }
 
 
-    public virtual ICollection<Author> Authors { get; set; } = new List<Author>();
+    public string? summary { set; get; }
+
+    public string? CoverUrl { get; set; }
+
+
 }
