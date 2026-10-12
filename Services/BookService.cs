@@ -13,9 +13,14 @@ public class BookService(BooksContext context) : IBookService
         throw new NotImplementedException();
     }
 
-    public Task<BookDto> GetBookByIdAsync(int id)
+    public async Task<BookDto> GetBookByIdAsync(int id)
     {
-        throw new NotImplementedException();
+        var book = await context.Books.FindAsync(id);
+        if (book == null)
+        {
+            throw new KeyNotFoundException($"Book with ID {id} not found.");
+        }
+        return Map(book);
     }
 
     public async Task<PagedResult<BookDto>> GetBooksAsync(int page, int pageSize)
@@ -27,7 +32,7 @@ public class BookService(BooksContext context) : IBookService
         var query = context.Books.AsNoTracking();
 
         var totalCount = await query.CountAsync();
-        var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        var items = await query.OrderBy(b => b.Id).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
 
         PagedResult<BookDto> result = new PagedResult<BookDto>
         {

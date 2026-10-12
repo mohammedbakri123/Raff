@@ -14,6 +14,11 @@ builder.Services.AddServices();
 
 var app = builder.Build();
 
+
+//TODO: need to configure the exception handler middleware to handle exceptions globally
+// app.UseExceptionHandler();
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
