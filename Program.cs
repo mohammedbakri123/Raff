@@ -1,21 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using Raff.Data;
-using Raff.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddOpenApi();
-
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<BooksContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        o => o.MapEnum<ReadingStatus>("reading_status", nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator())));
+builder.Services.AddDatabase(builder.Configuration);
 
 var app = builder.Build();
 
