@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace Raff.Models;
@@ -22,6 +22,8 @@ public partial class ReadingEntry
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public ReadingStatus? Status { get; set; }
 
     public virtual Book Book { get; set; } = null!;
 

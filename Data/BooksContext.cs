@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Raff.Models;
@@ -40,7 +40,7 @@ public partial class BooksContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasPostgresEnum("reading_status", new[] { "WANT_TO_READ", "READING", "FINISHED" });
+        modelBuilder.HasPostgresEnum<ReadingStatus>(schema: null, name: "reading_status", nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator());
 
         modelBuilder.Entity<Author>(entity =>
         {
@@ -118,6 +118,7 @@ public partial class BooksContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_at");
             entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Status).HasColumnName("status");
 
             entity.HasOne(d => d.Book).WithMany(p => p.ReadingEntries)
                 .HasForeignKey(d => d.BookId)

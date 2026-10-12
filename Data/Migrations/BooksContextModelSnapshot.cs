@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Raff.Data;
+using Raff.Models;
 
 #nullable disable
 
@@ -153,6 +154,10 @@ namespace Raff.Migrations
                     b.Property<DateTime?>("StartedAt")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("started_at");
+
+                    b.Property<ReadingStatus?>("Status")
+                        .HasColumnType("reading_status")
+                        .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .ValueGeneratedOnAdd()

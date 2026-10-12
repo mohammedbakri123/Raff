@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Raff.Data;
+using Raff.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -12,7 +14,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<BooksContext>(options =>
     options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        o => o.MapEnum<ReadingStatus>("reading_status", nameTranslator: new Npgsql.NameTranslation.NpgsqlNullNameTranslator())));
 
 var app = builder.Build();
 
