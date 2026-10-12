@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using Raff.Data;
+using Raff.Models;
+
 namespace Raff.Services;
 
-public class BookService : IBookService
+public class BookService(BooksContext context) : IBookService
 {
+
+
     public Task<BookDto> CreateBookAsync(createBookDto bookDto)
     {
         throw new NotImplementedException();
@@ -12,9 +18,29 @@ public class BookService : IBookService
         throw new NotImplementedException();
     }
 
-    public Task<PagedResult<BookDto>> GetBooksAsync(int page, int pageSize)
+    public async Task<PagedResult<BookDto>> GetBooksAsync(int page, int pageSize)
     {
-        throw new NotImplementedException();
+        if (page <= 0 || pageSize <= 0)
+        {
+            throw new ArgumentException("Page and PageSize must be greater than zero.");
+        }
+        var query = context.Books.AsNoTracking();
+
+        var totalCount = await query.CountAsync();
+        var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+        PagedResult<BookDto> result = new PagedResult<BookDto>
+        {
+            Items = items.Select(b => Map(b)),
+            TotalCount = totalCount,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+            Page = page,
+            PageSize = pageSize
+
+        };
+
+
+        return result;
     }
 
     public Task<BookDto> UpdateBookAsync(int id, createBookDto bookDto)
@@ -26,4 +52,13 @@ public class BookService : IBookService
     {
         throw new NotImplementedException();
     }
+
+
+    private BookDto Map(Book b)
+    {
+        BookDto book = new BookDto(b.Id, b.Title, b.PublishedYear, b.Summary, b.CoverUrl);
+        return book;
+
+    }
+
 }

@@ -9,6 +9,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDatabase(builder.Configuration);
 
+//add injected services
+builder.Services.AddServices();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
