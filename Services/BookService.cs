@@ -49,8 +49,9 @@ public class BookService(BooksContext context) : IBookService
 
     public async Task<BookDto> GetBookByIdAsync(int id)
     {
-        var book = await context.Books.FindAsync(id);
-        if (book == null)
+        var book = await context.Books
+            .Include(b => b.Authors)
+            .FirstOrDefaultAsync(b => b.Id == id); if (book == null)
         {
             throw new KeyNotFoundException($"Book with ID {id} not found.");
         }
@@ -66,7 +67,12 @@ public class BookService(BooksContext context) : IBookService
         var query = context.Books.AsNoTracking();
 
         var totalCount = await query.CountAsync();
-        var items = await query.OrderBy(b => b.Id).Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+        var items = await query
+        .Include(b => b.Authors)
+        .OrderBy(b => b.Id)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
 
         PagedResult<BookDto> result = new PagedResult<BookDto>
         {
@@ -95,9 +101,14 @@ public class BookService(BooksContext context) : IBookService
 
     private BookDto Map(Book b)
     {
-        BookDto book = new BookDto(b.Id, b.Title, b.PublishedYear, b.Summary, b.CoverUrl);
+        BookDto book = new BookDto(b.Id, b.Title, b.PublishedYear, b.Summary, b.CoverUrl, b.Authors.Select(a => Map(a)).ToArray());
         return book;
 
     }
 
+    private AuthorDto Map(Author a)
+    {
+        AuthorDto author = new AuthorDto(a.Id, a.Name, a.AvatarUrl);
+        return author;
+    }
 }
