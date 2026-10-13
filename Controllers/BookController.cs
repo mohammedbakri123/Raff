@@ -34,16 +34,26 @@ public class BookController : ControllerBase
         return Ok(book);
     }
 
-    [HttpPatch]
+    [HttpPatch("setAuthor")]
     public async Task<IActionResult> SetAuthor([FromBody] BookAuthorDto dto)
     {
         var book = await _bookService.SetAuthorAsync(dto);
         return Ok(book);
     }
-    [HttpPatch]
+    [HttpPatch("removeAuthor")]
     public async Task<IActionResult> RemoveAuthor([FromBody] BookAuthorDto dto)
     {
         var book = await _bookService.RemoveAuthorAsync(dto);
         return Ok(book);
+    }
+
+
+    [HttpPatch("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] updateBookDto dto)
+    {
+        var book = await _bookService.UpdateBookAsync(id, dto);
+
+        return Ok(book);
+
     }
 }

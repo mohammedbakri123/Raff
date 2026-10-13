@@ -70,7 +70,8 @@ public class BookService(BooksContext context) : IBookService
     {
         var book = await context.Books
             .Include(b => b.Authors)
-            .FirstOrDefaultAsync(b => b.Id == id); if (book == null)
+            .FirstOrDefaultAsync(b => b.Id == id);
+        if (book == null)
         {
             throw new KeyNotFoundException($"Book with ID {id} not found.");
         }
@@ -107,9 +108,32 @@ public class BookService(BooksContext context) : IBookService
         return result;
     }
 
-    public Task<BookDto> UpdateBookAsync(int id, createBookDto bookDto)
+    public async Task<BookDto> UpdateBookAsync(int id, updateBookDto dto)
     {
-        throw new NotImplementedException();
+        var book = await context.Books.FindAsync(id);
+
+        if (book == null)
+        {
+            throw new KeyNotFoundException($"Book with ID {id} not found.");
+        }
+
+        if (dto.title is not null)
+            book.Title = dto.title;
+
+        if (dto.summary is not null)
+            book.Summary = dto.summary;
+
+        if (dto.CoverUrl is not null)
+            book.CoverUrl = dto.CoverUrl;
+
+        if (dto.publishedYear is not null)
+            book.PublishedYear = dto.publishedYear;
+
+        await context.SaveChangesAsync();
+
+        return Map(book);
+
+
     }
 
     public Task<bool> DeleteBookAsync(int id)
