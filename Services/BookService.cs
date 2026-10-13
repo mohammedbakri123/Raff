@@ -10,13 +10,7 @@ public class BookService(BooksContext context) : IBookService
 
     public async Task<BookDto> CreateBookAsync(createBookDto bookDto)
     {
-        bool isExist = await context.Books.AnyAsync(b => b.Title == bookDto.title);
 
-        if (isExist)
-        {
-            throw new ArgumentException("Book with this title already exists");
-
-        }
 
         Book obj = new Book
         {
@@ -31,6 +25,24 @@ public class BookService(BooksContext context) : IBookService
         await context.SaveChangesAsync();
 
         return Map(obj);
+
+
+    }
+
+    public async Task<BookDto> SetAuthorAsync(int id, int authorId)
+    {
+        var book = await context.Books.FindAsync(id);
+        var author = await context.Authors.FindAsync(authorId);
+
+        if (book == null || author == null)
+        {
+            throw new KeyNotFoundException($"Book with ID {id} or Author with ID {authorId} not found.");
+        }
+
+        book.Authors.Add(author);
+        await context.SaveChangesAsync();
+
+        return Map(book);
 
 
     }
