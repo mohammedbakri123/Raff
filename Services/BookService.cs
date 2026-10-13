@@ -28,8 +28,7 @@ public class BookService(BooksContext context) : IBookService
 
 
     }
-
-    public async Task<BookDto> SetAuthorAsync(SetAuthoDto dto)
+    public async Task<BookDto> SetAuthorAsync(BookAuthorDto dto)
     {
         var book = await context.Books.FindAsync(dto.id);
         var author = await context.Authors.FindAsync(dto.authorId);
@@ -44,7 +43,27 @@ public class BookService(BooksContext context) : IBookService
 
         return Map(book);
 
+    }
+    public async Task<BookDto> RemoveAuthorAsync(BookAuthorDto dto)
+    {
+        var book = await context.Books.FindAsync(dto.id);
+        var author = await context.Authors.FindAsync(dto.authorId);
 
+        if (book == null || author == null)
+        {
+            throw new KeyNotFoundException($"Book with ID {dto.id} or Author with ID {dto.authorId} not found.");
+        }
+
+        bool isAuthorAssociated = book.Authors.Any(a => a.Id == dto.authorId);
+        if (!isAuthorAssociated)
+        {
+            throw new InvalidOperationException($"Author with ID {dto.authorId} is not associated with Book with ID {dto.id}.");
+        }
+
+        book.Authors.Remove(author);
+        await context.SaveChangesAsync();
+
+        return Map(book);
     }
 
     public async Task<BookDto> GetBookByIdAsync(int id)
@@ -111,4 +130,6 @@ public class BookService(BooksContext context) : IBookService
         AuthorDto author = new AuthorDto(a.Id, a.Name, a.AvatarUrl);
         return author;
     }
+
+
 }

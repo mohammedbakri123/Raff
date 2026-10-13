@@ -35,8 +35,15 @@ public class BookController : ControllerBase
     }
 
     [HttpPatch]
-    public async Task<IActionResult> SetAuthor([FromBody] SetAuthoDto dto)
+    public async Task<IActionResult> SetAuthor([FromBody] BookAuthorDto dto)
     {
-
+        var book = await _bookService.SetAuthorAsync(dto);
+        return Ok(book);
+    }
+    [HttpPatch]
+    public async Task<IActionResult> RemoveAuthor([FromBody] BookAuthorDto dto)
+    {
+        var book = await _bookService.RemoveAuthorAsync(dto);
+        return Ok(book);
     }
 }

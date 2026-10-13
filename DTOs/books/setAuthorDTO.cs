@@ -1,1 +1,1 @@
-public record SetAuthoDto(int id, int authorId);
+public record BookAuthorDto(int id, int authorId);
