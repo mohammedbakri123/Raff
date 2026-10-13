@@ -136,9 +136,19 @@ public class BookService(BooksContext context) : IBookService
 
     }
 
-    public Task<bool> DeleteBookAsync(int id)
+    public async Task DeleteBookAsync(int id)
     {
-        throw new NotImplementedException();
+        var book = await context.Books.FindAsync(id);
+
+        if (book == null)
+        {
+            throw new KeyNotFoundException($"Book with ID {id} not found.");
+        }
+
+        context.Books.Remove(book);
+
+        await context.SaveChangesAsync();
+
     }
 
 

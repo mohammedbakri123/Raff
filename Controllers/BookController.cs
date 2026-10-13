@@ -56,4 +56,18 @@ public class BookController : ControllerBase
         return Ok(book);
 
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteBook(int id)
+    {
+        try
+        {
+            await _bookService.DeleteBookAsync(id);
+            return NoContent();
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
 }
