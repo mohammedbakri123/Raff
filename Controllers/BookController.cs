@@ -33,4 +33,10 @@ public class BookController : ControllerBase
 
         return Ok(book);
     }
+
+    [HttpPatch]
+    public async Task<IActionResult> SetAuthor([FromBody] SetAuthoDto dto)
+    {
+
+    }
 }

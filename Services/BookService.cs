@@ -29,14 +29,14 @@ public class BookService(BooksContext context) : IBookService
 
     }
 
-    public async Task<BookDto> SetAuthorAsync(int id, int authorId)
+    public async Task<BookDto> SetAuthorAsync(SetAuthoDto dto)
     {
-        var book = await context.Books.FindAsync(id);
-        var author = await context.Authors.FindAsync(authorId);
+        var book = await context.Books.FindAsync(dto.id);
+        var author = await context.Authors.FindAsync(dto.authorId);
 
         if (book == null || author == null)
         {
-            throw new KeyNotFoundException($"Book with ID {id} or Author with ID {authorId} not found.");
+            throw new KeyNotFoundException($"Book with ID {dto.id} or Author with ID {dto.authorId} not found.");
         }
 
         book.Authors.Add(author);

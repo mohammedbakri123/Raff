@@ -1,0 +1,1 @@
+public record SetAuthoDto(int id, int authorId);
