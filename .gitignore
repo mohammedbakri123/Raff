@@ -8,6 +8,10 @@
 *.userosscache
 *.sln.docstates
 
+.geminiignore
+
+learn/
+
 # Build results
 [Bb]in/
 [Oo]bj/
@@ -208,3 +212,24 @@ FakesAssemblies/
 
 # JetBrains Rider
 *.sln.iml
+node_modules/
+dist/
+build/
+.next/
+out/
+vendor/
+coverage/
+.git/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+bun.lockb
+*.min.js
+*.min.css
+*.map
+*.svg
+*.png
+*.jpg
+*.mp4
+*.zip
+*.tar.gz
