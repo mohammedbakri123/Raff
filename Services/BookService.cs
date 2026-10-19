@@ -136,7 +136,7 @@ public class BookService(BooksContext context) : IBookService
 
     }
 
-    public async Task DeleteBookAsync(int id)
+    public async Task<bool> DeleteBookAsync(int id)
     {
         var book = await context.Books.FindAsync(id);
 
@@ -147,7 +147,9 @@ public class BookService(BooksContext context) : IBookService
 
         context.Books.Remove(book);
 
-        await context.SaveChangesAsync();
+        int affectedRows = await context.SaveChangesAsync();
+
+        return affectedRows > 0;
 
     }
 
