@@ -18,6 +18,12 @@ public class BookController : ControllerBase
         var result = await _bookService.GetBooksAsync(page, pageSize);
         return Ok(result);
     }
+    [HttpGet("cards")]
+    public async Task<IActionResult> GetBooksCards(int page = 1, int pageSize = 10)
+    {
+        var result = await _bookService.GetBooksCardsAsync(page, pageSize);
+        return Ok(result);
+    }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBook(int id)

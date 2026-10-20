@@ -108,6 +108,48 @@ public class BookService(BooksContext context) : IBookService
         return result;
     }
 
+    public async Task<PagedResult<BookCardDto>> GetBooksCardsAsync(int page, int pageSize)
+    {
+        if (page <= 0 || pageSize <= 0)
+        {
+            throw new ArgumentException("Page and PageSize must be greater than zero.");
+        }
+        var query = context.Books;
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+        .Include(b => b.Authors)
+        .OrderBy(b => b.Id)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .Select(b => new BookCardDto(
+            b.Id,
+            b.Title,
+            b.Authors.Select(a => a.Name).ToList(),
+            b.Tags.Select(t => t.Name).ToList(),
+            b.ReadingEntries.Count()
+        ))
+        .ToListAsync();
+
+
+
+        PagedResult<BookCardDto> result = new PagedResult<BookCardDto>
+        {
+            Items = items,
+            TotalCount = totalCount,
+            TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+            Page = page,
+            PageSize = pageSize,
+
+
+        };
+
+
+        return result;
+
+    }
+
+
     public async Task<BookDto> UpdateBookAsync(int id, updateBookDto dto)
     {
         var book = await context.Books.FindAsync(id);
