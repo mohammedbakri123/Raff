@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Npgsql.NameTranslation;
 using Raff.Models;
 using Raff.Services;
@@ -11,18 +13,16 @@ public static class DependencyInjection
     {
         services.AddDbContext<BooksContext>(options =>
             options.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection"))
-                .LogTo(Console.WriteLine, LogLevel.Information)
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors());
+                configuration.GetConnectionString("DefaultConnection"),
+                npgsqlOptions =>
+                {
+                    npgsqlOptions.MapEnum<ReadingStatus>(
+                        "reading_status",
+                        nameTranslator: new NpgsqlNullNameTranslator());
+                }));
 
-
-
-    
         return services;
     }
-
-
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {

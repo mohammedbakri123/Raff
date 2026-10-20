@@ -6,7 +6,6 @@ public class Tag
 
     public required string Name { get; set; }
 
-    public virtual ICollection<Tag> Tags { get; set; } = new List<Tag>();
-
+    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
 
 }

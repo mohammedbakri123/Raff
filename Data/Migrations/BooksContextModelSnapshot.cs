@@ -42,6 +42,21 @@ namespace Raff.Migrations
                     b.ToTable("book_authors", (string)null);
                 });
 
+            modelBuilder.Entity("BookTag", b =>
+                {
+                    b.Property<int>("BooksId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("BooksId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("BookTag");
+                });
+
             modelBuilder.Entity("Raff.Models.Author", b =>
                 {
                     b.Property<int>("Id")
@@ -75,9 +90,6 @@ namespace Raff.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("CoverUrl")
                         .HasColumnType("text")
                         .HasColumnName("cover_url");
@@ -98,26 +110,7 @@ namespace Raff.Migrations
                     b.HasKey("Id")
                         .HasName("books_pkey");
 
-                    b.HasIndex("CategoryId");
-
                     b.ToTable("books", (string)null);
-                });
-
-            modelBuilder.Entity("Raff.Models.Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Raff.Models.ReadingEntry", b =>
@@ -180,6 +173,23 @@ namespace Raff.Migrations
                     b.ToTable("reading_entries", (string)null);
                 });
 
+            modelBuilder.Entity("Raff.Models.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("Raff.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -237,13 +247,19 @@ namespace Raff.Migrations
                         .HasConstraintName("book_authors_book_id_fkey");
                 });
 
-            modelBuilder.Entity("Raff.Models.Book", b =>
+            modelBuilder.Entity("BookTag", b =>
                 {
-                    b.HasOne("Raff.Models.Category", "Category")
+                    b.HasOne("Raff.Models.Book", null)
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("BooksId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Category");
+                    b.HasOne("Raff.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Raff.Models.ReadingEntry", b =>
