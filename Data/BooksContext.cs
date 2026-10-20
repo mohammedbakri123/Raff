@@ -29,7 +29,7 @@ public partial class BooksContext : DbContext
     public virtual DbSet<ReadingEntry> ReadingEntries { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<Category> Categories { get; set; }
+    public virtual DbSet<Tag> Tags { get; set; }
 
 
 

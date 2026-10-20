@@ -11,24 +11,18 @@ public static class DependencyInjection
     {
         services.AddDbContext<BooksContext>(options =>
             options.UseNpgsql(
-                configuration.GetConnectionString("DefaultConnection")
-                // ,
-                // npgsqlOptions =>
-                // {
-                //     npgsqlOptions.MapEnum<ReadingStatus>(
-                //         "reading_status",
-                //         nameTranslator: new NpgsqlNullNameTranslator());
-                // }
-                ));
+                configuration.GetConnectionString("DefaultConnection"))
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors());
 
+
+
+    
         return services;
     }
 
-    // public static IServiceCollection AddServices(this IServiceCollection services)
-    // {
-    //     services.AddScoped<IBookService, BookService>();
-    //     return services;
-    // }
+
 
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
