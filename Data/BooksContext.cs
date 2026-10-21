@@ -118,7 +118,8 @@ public partial class BooksContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("updated_at");
             entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.Status).HasColumnName("status");
+            entity.Property(e => e.Status).HasColumnName("status")
+            .HasDefaultValue(ReadingStatus.WANT_TO_READ);
 
             entity.HasOne(d => d.Book).WithMany(p => p.ReadingEntries)
                 .HasForeignKey(d => d.BookId)

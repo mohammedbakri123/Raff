@@ -137,11 +137,17 @@ namespace Raff.Migrations
                         .HasColumnName("finished_at");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("text")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
                         .HasColumnName("notes");
 
+                    b.Property<decimal>("Percentage")
+                        .HasPrecision(5, 2)
+                        .HasColumnType("numeric(5,2)");
+
                     b.Property<decimal?>("Rating")
-                        .HasColumnType("numeric")
+                        .HasPrecision(4, 2)
+                        .HasColumnType("numeric(4,2)")
                         .HasColumnName("rating");
 
                     b.Property<DateTime?>("StartedAt")
@@ -149,7 +155,9 @@ namespace Raff.Migrations
                         .HasColumnName("started_at");
 
                     b.Property<ReadingStatus?>("Status")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("reading_status")
+                        .HasDefaultValue(ReadingStatus.WANT_TO_READ)
                         .HasColumnName("status");
 
                     b.Property<DateTime?>("UpdatedAt")
