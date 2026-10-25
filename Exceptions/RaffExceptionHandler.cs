@@ -1,7 +1,10 @@
+namespace Raff.Exceptions;
+
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 public sealed class RaffExceptionHandler(
+    IProblemDetailsService problemDetailsService,
     ILogger<RaffExceptionHandler> logger)
     : IExceptionHandler
 {
@@ -10,29 +13,49 @@ public sealed class RaffExceptionHandler(
         Exception exception,
         CancellationToken cancellationToken)
     {
-        logger.LogError(
-            exception,
-            "An unhandled exception occurred.");
-
-        var (status, title) = exception switch
+        if (context.Response.HasStarted)
         {
-            KeyNotFoundException =>
-                (404, "Resource not found."),
+            logger.LogWarning("Response has already started, skipping exception handler.");
+            return false;
+        }
 
-            _ =>
-                (500, "An unexpected error occurred.")
+        if (exception is OperationCanceledException)
+        {
+            logger.LogInformation("Request was cancelled by the client.");
+            return true;
+        }
+
+        var (statusCode, title) = exception switch
+        {
+            KeyNotFoundException => (StatusCodes.Status404NotFound, "Resource not found."),
+            BadHttpRequestException => (StatusCodes.Status400BadRequest, "Invalid request."),
+            ArgumentException => (StatusCodes.Status400BadRequest, "Invalid argument."),
+            UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized."),
+            _ => (StatusCodes.Status500InternalServerError, "An unexpected error occurred.")
         };
 
-        context.Response.StatusCode = status;
+        if (statusCode >= StatusCodes.Status500InternalServerError)
+        {
+            logger.LogError(exception, "Unhandled server error occurred: {Message}", exception.Message);
+        }
+        else
+        {
+            logger.LogWarning("Handled client error ({StatusCode}): {Message}", statusCode, exception.Message);
+        }
 
-        await context.Response.WriteAsJsonAsync(
-            new ProblemDetails
+        context.Response.StatusCode = statusCode;
+
+        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
+        {
+            HttpContext = context,
+            Exception = exception,
+            ProblemDetails = new ProblemDetails
             {
-                Status = status,
-                Title = title
-            },
-            cancellationToken: cancellationToken);
-
-        return true;
+                Status = statusCode,
+                Title = title,
+                Detail = exception.Message,
+                Instance = context.Request.Path
+            }
+        });
     }
 }

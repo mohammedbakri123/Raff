@@ -1,4 +1,5 @@
 using Raff.Data;
+using Raff.Exceptions;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,11 +18,6 @@ builder.Services.AddExceptionHandler<RaffExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
-
-
-//TODO: need to configure the exception handler middleware to handle exceptions globally
-// app.UseExceptionHandler();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
