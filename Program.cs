@@ -13,6 +13,9 @@ builder.Services.AddDatabase(builder.Configuration);
 //add injected services
 builder.Services.AddServices();
 
+builder.Services.AddExceptionHandler<RaffExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 
@@ -32,6 +35,8 @@ if (app.Environment.IsDevelopment())
     });
     app.MapScalarApiReference();
 }
+
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 app.MapControllers();
