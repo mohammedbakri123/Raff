@@ -37,7 +37,8 @@ public sealed class TokenService(IConfiguration configuration)
         {
             new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
             new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Email, email)
+            new Claim(ClaimTypes.Email, email),
+            new Claim(ClaimTypes.Role, "User")
         };
 
         var token = new JwtSecurityToken(
