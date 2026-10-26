@@ -1,4 +1,7 @@
-using Microsoft.AspNetCore.Identity.Data;
+
+using Raff.DTOs.Auth;
+
+namespace Raff.Services;
 
 public interface IAuthService
 {

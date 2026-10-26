@@ -6,13 +6,12 @@ using Raff.Models;
 
 namespace Raff.Services;
 
-public sealed class AuthService(
-    BooksContext context,
-    IPasswordHasher<User> passwordHasher)
+public sealed class AuthService(BooksContext context, IPasswordHasher<User> passwordHasher) : IAuthService
 {
+
     public async Task<bool> ValidateCredentialsAsync(
-        LoginRequest request,
-        CancellationToken cancellationToken = default)
+         LoginRequest request,
+         CancellationToken cancellationToken = default)
     {
         var user = await context.Users
             .SingleOrDefaultAsync(
