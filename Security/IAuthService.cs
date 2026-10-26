@@ -9,4 +9,8 @@ public interface IAuthService
     Task<UserDto?> AuthenticateAsync(
         LoginRequest request,
         CancellationToken cancellationToken = default);
+
+    Task<UserDto?> RegisterAsync(
+RegisterRequest request,
+CancellationToken cancellationToken = default);
 }
