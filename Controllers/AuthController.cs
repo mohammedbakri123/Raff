@@ -40,4 +40,22 @@ public class AuthController(
             expiresIn = 900
         });
     }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(
+    RegisterRequest request,
+    CancellationToken cancellationToken)
+    {
+        var user = await authService.RegisterAsync(
+            request,
+            cancellationToken);
+
+        if (user is null)
+            return Conflict(new
+            {
+                message = "Email or username is already registered."
+            });
+
+        return Created($"/api/users/{user.Id}", user);
+    }
 }
