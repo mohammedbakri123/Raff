@@ -10,9 +10,7 @@ public sealed class TokenService(IConfiguration configuration)
     : ITokenService
 {
     public string GenerateAccessToken(
-        int userId,
-        string username,
-        string email)
+        CreateTokenDTO tokenDTO)
     {
         var key = configuration["Jwt:Key"]
             ?? throw new InvalidOperationException(
@@ -35,10 +33,10 @@ public sealed class TokenService(IConfiguration configuration)
 
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
-            new Claim(ClaimTypes.Name, username),
-            new Claim(ClaimTypes.Email, email),
-            new Claim(ClaimTypes.Role, "User")
+            new Claim(ClaimTypes.NameIdentifier, tokenDTO.UserId.ToString()),
+            new Claim(ClaimTypes.Name, tokenDTO.Username),
+            new Claim(ClaimTypes.Email, tokenDTO.Email),
+            new Claim(ClaimTypes.Role, tokenDTO.UserRole.ToString())
         };
 
         var token = new JwtSecurityToken(
