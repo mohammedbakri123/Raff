@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Raff.DTOs.Auth;
 using Raff.Services;
@@ -57,5 +58,22 @@ public class AuthController(
             });
 
         return Created($"/api/users/{user.Id}", user);
+    }
+
+
+    [Authorize]
+    [HttpGet("me")]
+    public IActionResult Me()
+    {
+        return Ok(new
+        {
+            Id = User.FindFirst(
+                System.Security.Claims.ClaimTypes.NameIdentifier)?.Value,
+
+            Username = User.Identity?.Name,
+
+            Role = User.FindFirst(
+                System.Security.Claims.ClaimTypes.Role)?.Value
+        });
     }
 }
