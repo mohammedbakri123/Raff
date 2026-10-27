@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-
+using Raff.Authorization;
 using Raff.Data;
 using Raff.Exceptions;
 using Scalar.AspNetCore;
@@ -60,13 +60,8 @@ builder.Services
         };
     });
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("CanManageBooks", policy =>
-    {
-        policy.RequireRole("Admin");
-    });
-});
+builder.Services.AddRaffAuthorization();
+
 // OpenAPI and JWT documentation
 builder.Services.AddOpenApi(options =>
 {
