@@ -15,4 +15,4 @@ using Raff.Models;
 
 // }
 
-public record BookDto(int id, string? title, int? publishedYear, string? summary, string? coverUrl, AuthorDto[] Authors);
+public record BookDto(int id, string? title, int? publishedYear, string? summary, string? coverUrl, AuthorDto?[] Authors);

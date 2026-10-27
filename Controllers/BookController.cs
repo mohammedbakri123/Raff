@@ -1,4 +1,5 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -25,6 +26,7 @@ public class BookController : ControllerBase
         return Ok(result);
     }
 
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBook(int id)
     {
@@ -32,6 +34,7 @@ public class BookController : ControllerBase
         return Ok(book);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] createBookDto dto)
     {
@@ -40,12 +43,15 @@ public class BookController : ControllerBase
         return Ok(book);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPatch("setAuthor")]
     public async Task<IActionResult> SetAuthor([FromBody] BookAuthorDto dto)
     {
         var book = await _bookService.SetAuthorAsync(dto);
         return Ok(book);
     }
+
+    [Authorize(Roles = "Admin")]
     [HttpPatch("removeAuthor")]
     public async Task<IActionResult> RemoveAuthor([FromBody] BookAuthorDto dto)
     {
@@ -54,6 +60,7 @@ public class BookController : ControllerBase
     }
 
 
+    [Authorize(Roles = "Admin")]
     [HttpPatch("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] updateBookDto dto)
     {
@@ -63,6 +70,8 @@ public class BookController : ControllerBase
 
     }
 
+
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBook(int id)
     {

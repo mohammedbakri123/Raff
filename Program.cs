@@ -60,8 +60,13 @@ builder.Services
         };
     });
 
-builder.Services.AddAuthorization();
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CanManageBooks", policy =>
+    {
+        policy.RequireRole("Admin");
+    });
+});
 // OpenAPI and JWT documentation
 builder.Services.AddOpenApi(options =>
 {
